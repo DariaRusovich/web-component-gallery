@@ -4,9 +4,7 @@ class PhotoGallery extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    console.log(template.content);
     this.shadowRoot.appendChild(template.content.cloneNode(true));
-    
     this.shadowRoot.querySelector('h1').innerText = this.getAttribute('name');
     this.slides = Array.from(document.querySelector('photo-gallery').children);
     this.numberOfSlides = this.slides.length;
