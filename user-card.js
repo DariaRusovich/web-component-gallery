@@ -42,8 +42,6 @@ button {
     inset: 0;
     width: 100%;
     height: 100%;
-    border-radius: 5px;
-    box-shadow: 0px 2px 16px rgba(32, 108, 164, 0.16);
 }
 .btn-wrapper {
     margin-top: 25px;
