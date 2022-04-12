@@ -31,15 +31,15 @@ button {
 }
 .image-slider {
     position: relative;
-    width: 400px;
+    width: 800px;
     min-height: 600px;
     margin-top: 20px;
     overflow: hidden;
     display: flex;
-    
 }
-::slotted(img){
+::slotted(.active){
     position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     border-radius: 5px;
@@ -57,6 +57,10 @@ button {
     background-color: hsl(230, 23%, 26%);
     color: #fff;
 }
+.btn:hover{
+    background-color: hsl(230, 23%, 36%);
+    transition: 0.3s;
+}
 </style>
 
 <div class='container'>
@@ -65,25 +69,60 @@ button {
 <div class='image-slider'>
 <slot name='image'></slot>
 </div>
-
 <div class='btn-wrapper'>
 <button class='btn btn-prev' id='btn-prev'>&#8672;</button>
 <button class='btn btn-next' id='btn-next'>&#8674;</button>
 </div>
 </div>
 </div>
-
 `;
 
 class PhotoGallery extends HTMLElement {
-
-
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
     this.shadowRoot.querySelector('h1').innerText = this.getAttribute('name');
+    this.slides = Array.from(document.querySelector('photo-gallery').children);
+    this.numberOfSlides = this.slides.length;
+    this.slideNumber = 0;
+    this.btnNext = this.shadowRoot.querySelector('#btn-next');
+    this.btnPrev = this.shadowRoot.querySelector('#btn-prev');
+    this.btnNext.addEventListener('click', () => {
+        this.slides.forEach((slide) => {
+            slide.classList.remove('active')
+        })
+        this.next()
+    });
+    this.btnPrev.addEventListener('click', () => {
+        this.slides.forEach((slide) => {
+            slide.classList.remove('active')
+        })
+        this.prev()
+    });
   }
+
+  next() {
+    this.slideNumber++;
+    if (this.slideNumber > this.numberOfSlides - 1) {
+      this.slideNumber = 0;
+    }
+    this.slides[this.slideNumber].classList.add('active')
+  }
+
+  prev() {
+    this.slideNumber--;
+    if (this.slideNumber < 0) {
+      this.slideNumber = this.numberOfSlides - 1;
+    }
+    this.slides[this.slideNumber].classList.add('active')
+  }
+
+//   connectedCallback() {
+//     this.shadowRoot.getElementById('btn-prev').addEventListener('click', () => {
+//       this.prev();
+//     });
+//   }
 }
 
 window.customElements.define('photo-gallery', PhotoGallery);
